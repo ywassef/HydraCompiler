@@ -142,8 +142,6 @@ namespace ANTLRCompiler
 
 			//Console.WriteLine("Entrou no while de " + escopo_atual);
 
-
-
 			assembly.AppendLine(before_while + ":");
 
 			var expressao = Visit(context.expressao());
