@@ -15,6 +15,7 @@ namespace ANTLRCompiler
 		{
 			Funcao temp = new Funcao(nome_funcao, escopo.RetornaTamanho(), escopo, labels.GerarLabelFuncao());
 			Escopos.Add(nome_funcao, temp);
+
 		}
 
 		public string retornaLabelFuncao(string nome)
@@ -73,20 +74,9 @@ namespace ANTLRCompiler
 			this.tamanho = tamanho;
 			this.variaveis = variaveis;
 			this.label = label;
-			CriaIndices();
-		}
 
-		public void CriaIndices()
-		{
-			int i = 0;
-			foreach (var par in variaveis.Tabela)
-			{
-				par.Value.indice = i;
-				if (par.Value.classe == Simbolo.Classe.vetor)
-					i += par.Value.tamanho;
-				else
-					i++;
-			}
+			Console.WriteLine("\nInserindo variaves para a funcao " + nome);
+			variaveis.ImprimeTabela();
 		}
 
 		public string retornaLabel()

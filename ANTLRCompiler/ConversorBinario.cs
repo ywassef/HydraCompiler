@@ -82,6 +82,7 @@ namespace ANTLRCompiler
 					return jmp_address;
 				}
 				//Console.WriteLine("ka " + operandos[0] + ' ' + num_op + ' ' + operandos[num_op] + ' ' + optype + "contains key: " + labels.ContainsKey(operandos[1]));
+
 				int op_imm = int.Parse(operandos[num_op].Replace(',', ' '));
 				op = Convert.ToString(op_imm, 2);
 				op = operandos[1].IndexOf('-') == -1 ? op.PadLeft(8, '0') : op.PadLeft(8, '1');
@@ -111,7 +112,14 @@ namespace ANTLRCompiler
 				string[] operandos = instrucao.Split(' ');
 				if(operandos.Length == 1)
 				{
-					if(operandos[0].IndexOf("Vis") == -1)
+					if (operandos[0] == "halt")
+					{
+						binary_code.AppendLine("inst_memory[" + i + "] = 16'B1111000000000000;");
+						binary_code.AppendLine("inst_memory[" + (i + 1) + "] = 0;");
+						binary_code.AppendLine();
+						i += 2;
+					}
+					else if (operandos[0].IndexOf("Vis") == -1)
 					{
 						binary_code.AppendLine("inst_memory[" + i + "] = 16'B1111100000000000;");
 						binary_code.AppendLine("inst_memory[" + (i + 1) + "] = 0;");

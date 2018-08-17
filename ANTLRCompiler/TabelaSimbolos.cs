@@ -156,7 +156,7 @@ namespace ANTLRCompiler
 		public int indice;
 		public bool param;
 
-		public Simbolo(string id, Classe classe, string tipo, int nivel, int tamanho, bool param)
+		public Simbolo(string id, Classe classe, string tipo, int nivel, int tamanho, bool param, int indice)
 		{
 			this.id = id;
 			this.classe = classe;
@@ -164,6 +164,7 @@ namespace ANTLRCompiler
 			this.nivel = nivel;
 			this.tamanho = tamanho;
 			this.param = param;
+			this.indice = indice;
 		}
 
 	}

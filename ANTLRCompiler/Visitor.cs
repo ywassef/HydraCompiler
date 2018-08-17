@@ -11,6 +11,7 @@ namespace ANTLRCompiler
 	{
 
 		int nivel = 0;
+		int indice = 0;
 		bool temMain = false;
 		bool emExpressao = false;
 		TabelaSimbolos Tabela = new TabelaSimbolos();
@@ -36,13 +37,14 @@ namespace ANTLRCompiler
 				temMain = true;
 
 			if (!Tabela.Declarado(ID, nivel))
-				Tabela.Insere(new Simbolo(ID, Simbolo.Classe.funcao, context.tipoespecificador().GetText(), nivel, 0, false));
+				Tabela.Insere(new Simbolo(ID, Simbolo.Classe.funcao, context.tipoespecificador().GetText(), nivel, 0, false, 0));
 			else
 				Console.WriteLine("Linha " + context.start.Line + ": Erro ao declarar a função \'" + ID + "\'.\n\tVerifique se já há alguma outra variável/função com o mesmo nome.");
 			nivel++;
 
+			Console.WriteLine("\n----------------------------------visitando " + ID);
 			VisitChildren(context);
-			//Console.WriteLine (context.GetText ());
+			indice = 0;
 
 			Escopos.Insere(ID, Tabela.RetornaEscopo(nivel));
 
@@ -61,10 +63,20 @@ namespace ANTLRCompiler
 				Console.WriteLine("Linha " + context.start.Line + ": Declaração da variável \'" + ID + "\' como void não permitida.");
 
 			if (!Tabela.Declarado(ID, nivel))
-				Tabela.Insere(new Simbolo(ID, Simbolo.Classe.inteiro, context.tipoespecificador().GetText(),nivel, 1, false));
+			{
+				Tabela.Insere(new Simbolo(ID, Simbolo.Classe.inteiro, context.tipoespecificador().GetText(),nivel, 1, false, indice));
+				indice++;
+			}
 			else
 				Console.WriteLine("Linha " + context.start.Line + ": Erro ao declarar a variável \'" + ID + "\'.\n\tVerifique se já há algum outro variável/função com o mesmo nome.");
 
+			VisitChildren(context);
+
+			return null;
+		}
+
+		public override object VisitParamlista([NotNull] CminusParser.ParamlistaContext context)
+		{
 			VisitChildren(context);
 
 			return null;
@@ -79,7 +91,10 @@ namespace ANTLRCompiler
 				Console.WriteLine("Linha " + context.start.Line + ": Declaração da variável \'" + ID + "\' como void não permitida.");
 
 			if (!Tabela.Declarado(ID, nivel))
-				Tabela.Insere(new Simbolo(ID, Simbolo.Classe.vetor, context.tipoespecificador().GetText(), nivel, int.Parse(context.NUM().GetText()), false));
+			{
+				Tabela.Insere(new Simbolo(ID, Simbolo.Classe.vetor, context.tipoespecificador().GetText(), nivel, int.Parse(context.NUM().GetText()), false, indice));
+				indice += int.Parse(context.NUM().GetText());
+			}
 			else
 				Console.WriteLine("Linha " + context.start.Line + ": Erro ao declarar a variável \'" + ID + "\'.\n\tVerifique se já há algum outro variável/função com o mesmo nome.");
 
@@ -94,7 +109,10 @@ namespace ANTLRCompiler
 			var ID = context.ID().GetText();
 
 			if (!Tabela.Declarado(ID, nivel))
-				Tabela.Insere(new Simbolo(ID, Simbolo.Classe.inteiro, context.tipoespecificador().GetText(), nivel, 1, true));
+			{
+				Tabela.Insere(new Simbolo(ID, Simbolo.Classe.inteiro, context.tipoespecificador().GetText(), nivel, 1, true, indice));
+				indice++;
+			}
 			else
 				Console.WriteLine("Linha " + context.start.Line + ": Erro ao declarar o parâmetro \'" + ID + "\'.\n\tVerifique se já há alguma outra variável/função com o mesmo nome.");
 
@@ -105,11 +123,14 @@ namespace ANTLRCompiler
 
 		public override object VisitVetorparam([NotNull] CminusParser.VetorparamContext context)
 		{
-
+			
 			var ID = context.ID().GetText();
 
 			if (!Tabela.Declarado(ID, nivel))
-				Tabela.Insere(new Simbolo(ID, Simbolo.Classe.vetor, context.tipoespecificador().GetText(), nivel, 1, true));
+			{
+				Tabela.Insere(new Simbolo(ID, Simbolo.Classe.vetor, context.tipoespecificador().GetText(), nivel, 1, true, indice));
+				indice++;
+			}
 			else
 				Console.WriteLine("Linha " + context.start.Line + ": Erro ao declarar o parâmetro \'" + ID + "\'.\n\tVerifique se já há alguma outra variável/função com o mesmo nome.");
 

@@ -38,6 +38,8 @@ namespace ANTLRCompiler
 
 			VisitChildren(context);
 
+			assembly.AppendLine("halt");
+
 			File.WriteAllText("teste.temp", assembly.ToString());
 
 			return null;
@@ -304,13 +306,15 @@ namespace ANTLRCompiler
 				case "<=":
 					assembly.AppendLine("slt " + reg  + ", " + somaexpressao1 + ", " + somaexpressao0);
 					//assembly.AppendLine(reg + " = " + somaexpressao1 + " < " + somaexpressao0);
-					assembly.AppendLine("not " + reg + ", " + reg);
+					assembly.AppendLine("sub " + reg + ", " + reg + ", 1");
+					//assembly.AppendLine("not " + reg + ", " + reg);
 					//assembly.AppendLine(reg + " = ~" + reg);
 					break;
 				case ">=":
 					assembly.AppendLine("slt " + reg + ", " + somaexpressao0 + ", " + somaexpressao1);
 					//assembly.AppendLine(reg + " = " + somaexpressao0 + " < " + somaexpressao1);
-					assembly.AppendLine("not " + reg + ", " + reg);
+					assembly.AppendLine("sub " + reg + ", " + reg + ", 1");
+					//assembly.AppendLine("not " + reg + ", " + reg);
 					//assembly.AppendLine(reg + " = ~" + reg);
 					break;
 				case "==":
@@ -321,7 +325,8 @@ namespace ANTLRCompiler
 					assembly.AppendLine("seq " + reg + ", " + somaexpressao1 + ", " + somaexpressao0);
 					//assembly.AppendLine(reg + " = " + somaexpressao1 + " == " + somaexpressao0);
 					//assembly.AppendLine(reg + " = ~" + reg);
-					assembly.AppendLine("not " + reg + ", " + reg);
+					assembly.AppendLine("sub " + reg + ", " + reg + ", 1");
+					//assembly.AppendLine("not " + reg + ", " + reg);
 					break;
 				default:
 					break;
@@ -476,6 +481,7 @@ namespace ANTLRCompiler
 				assembly.AppendLine("output " + termos);
 				string[] termo_free = ((string)termos).Split(',');
 				registradores.FreeDataRegister(termo_free[0]);
+				registradores.FreeMemRegister(termo_free[0]);
 				return termo_free[0];
 			}
 
