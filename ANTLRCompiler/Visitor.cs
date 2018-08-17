@@ -42,7 +42,6 @@ namespace ANTLRCompiler
 				Console.WriteLine("Linha " + context.start.Line + ": Erro ao declarar a função \'" + ID + "\'.\n\tVerifique se já há alguma outra variável/função com o mesmo nome.");
 			nivel++;
 
-			Console.WriteLine("\n----------------------------------visitando " + ID);
 			VisitChildren(context);
 			indice = 0;
 

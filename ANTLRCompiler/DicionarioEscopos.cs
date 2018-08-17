@@ -74,9 +74,6 @@ namespace ANTLRCompiler
 			this.tamanho = tamanho;
 			this.variaveis = variaveis;
 			this.label = label;
-
-			Console.WriteLine("\nInserindo variaves para a funcao " + nome);
-			variaveis.ImprimeTabela();
 		}
 
 		public string retornaLabel()
